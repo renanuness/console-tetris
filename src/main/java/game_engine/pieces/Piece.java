@@ -1,4 +1,7 @@
+package game_engine.pieces;
+
 import java.util.List;
+import game_engine.Point;
 
 public interface Piece {
     void draw();

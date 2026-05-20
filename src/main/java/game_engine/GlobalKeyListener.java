@@ -1,5 +1,5 @@
-import com.github.kwhat.jnativehook.GlobalScreen;
-import com.github.kwhat.jnativehook.NativeHookException;
+package game_engine;
+
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
@@ -10,12 +10,14 @@ public class GlobalKeyListener implements NativeKeyListener {
     private Consumer onRightKeyPressed;
     private Consumer onDownKeyPressed;
     private Consumer onUpKeyPressed;
+    private Consumer onEnterPressed;
 
-    public GlobalKeyListener(Consumer leftKeyPressed, Consumer rightKeyPressed, Consumer upKeyPressed, Consumer downKeyPressed){
+    public GlobalKeyListener(Consumer leftKeyPressed, Consumer rightKeyPressed, Consumer upKeyPressed, Consumer downKeyPressed, Consumer enterPressed){
         this.onLeftKeyPressed = leftKeyPressed;
         this.onRightKeyPressed = rightKeyPressed;
         this.onDownKeyPressed = downKeyPressed;
         this.onUpKeyPressed = upKeyPressed;
+        this.onEnterPressed = enterPressed;
     }
 
     public void nativeKeyPressed(NativeKeyEvent e){
@@ -33,6 +35,10 @@ public class GlobalKeyListener implements NativeKeyListener {
 
         if(e.getKeyCode() == NativeKeyEvent.VC_DOWN){
             onDownKeyPressed.accept("DOWN");
+        }
+
+        if(e.getKeyCode() == NativeKeyEvent.VC_ENTER){
+            onEnterPressed.accept("ENTER");
         }
     }
 }

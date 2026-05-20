@@ -1,3 +1,8 @@
+package game_engine.pieces;
+
+import game_engine.BoardSize;
+import game_engine.Point;
+
 public abstract class Shape implements Piece{
     protected int rotation;
     protected Point position;

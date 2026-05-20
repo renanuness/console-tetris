@@ -1,3 +1,8 @@
+package game_engine.pieces;
+
+import game_engine.BoardSize;
+import game_engine.Point;
+
 import java.util.ArrayList;
 import java.util.List;
 

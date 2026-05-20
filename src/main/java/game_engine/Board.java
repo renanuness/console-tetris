@@ -1,3 +1,10 @@
+package game_engine;
+
+import game_engine.pieces.BoxShape;
+import game_engine.pieces.LShape;
+import game_engine.pieces.Piece;
+import game_engine.pieces.TShape;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -11,6 +18,7 @@ public class Board {
     private List<Integer> linesToClean = new ArrayList<Integer>();
     private int score;
     private Consumer<Integer> endGame;
+
     public Board(int rows, int columns, Consumer<Integer> endGame){
         pieceControl = 0;
         this.endGame = endGame;
@@ -28,6 +36,17 @@ public class Board {
         }
     }
 
+    public int getPointContent(int row, int column){
+        return board[row][column];
+    }
+
+    public int getBoardSizeRow(){
+        return boardSize.rows;
+    }
+
+    public int getBoardSizeColumns(){
+        return boardSize.columns;
+    }
     public void instantiatePiece(){
         if(pieceControl % 3 == 0) {
             Piece newPiece = new LShape(1, 4, boardSize);
@@ -100,7 +119,8 @@ public class Board {
         }
         return false;
     }
-     public void consolidatePiece(List<Point> points){
+
+    public void consolidatePiece(List<Point> points){
          for(var point: points){
              board[point.getRow()][point.getColumn()] = 2;
          }
@@ -127,48 +147,6 @@ public class Board {
         }
         score += linesToClean.size() * 10;
     }
-
-    public void draw(){
-        // HEADER
-        System.out.print(String.format("\033[%d;%dH", 0, 0));
-        System.out.print("Score: " + score);
-
-        System.out.print(String.format("\033[%d;%dH", 0, 20));
-        System.out.print("Level: "+ 1);
-        System.out.println();
-
-        // UPPER BOARD
-        System.out.print(String.format("\033[%d;%dH", 2, 1));
-        System.out.print("\u250C");
-        for(int i = 0; i < this.boardSize.columns; i++){
-            System.out.print("\u2500");
-        }
-        System.out.print("\u2510");
-        System.out.println();
-
-        // BOARD CONTENT
-        for(int i = 1; i < this.boardSize.rows; i++){
-            System.out.print("\u2502");
-            for(int j = 0; j < this.boardSize.columns; j++){
-                String c = "\u23F9";
-                if(board[i][j] == 0){
-                    c = "\u25A1";
-                }
-                System.out.print(c);
-            }
-            System.out.print("\u2502");
-            System.out.println();
-        }
-
-        //System.out.print(String.format("\033[%d;%dH", 2, 1));
-        System.out.print("\u2514");
-        for(int i = 0; i < this.boardSize.columns; i++){
-            System.out.print("\u2500");
-        }
-        System.out.print("\u2518");
-        System.out.println();
-    }
-
     // Rearrange board
     private void updateBoard(){
         int linesDown = 0;
@@ -243,5 +221,46 @@ public class Board {
         if(activePiece != null) {
             activePiece.move(0);
         }
+    }
+
+    public void draw(){
+        // HEADER
+        System.out.print(String.format("\033[%d;%dH", 0, 0));
+        System.out.print("Score: " + score);
+
+        System.out.print(String.format("\033[%d;%dH", 0, 20));
+        System.out.print("Level: "+ 1);
+        System.out.println();
+
+        // UPPER BOARD
+        System.out.print(String.format("\033[%d;%dH", 2, 1));
+        System.out.print("\u250C");
+        for(int i = 0; i < this.boardSize.columns; i++){
+            System.out.print("\u2500");
+        }
+        System.out.print("\u2510");
+        System.out.println();
+
+        // BOARD CONTENT
+        for(int i = 1; i < this.boardSize.rows; i++){
+            System.out.print("\u2502");
+            for(int j = 0; j < this.boardSize.columns; j++){
+                String c = "\u23F9";
+                if(board[i][j] == 0){
+                    c = "\u25A1";
+                }
+                System.out.print(c);
+            }
+            System.out.print("\u2502");
+            System.out.println();
+        }
+
+        //System.out.print(String.format("\033[%d;%dH", 2, 1));
+        System.out.print("\u2514");
+        for(int i = 0; i < this.boardSize.columns; i++){
+            System.out.print("\u2500");
+        }
+        System.out.print("\u2518");
+        System.out.println();
     }
 }

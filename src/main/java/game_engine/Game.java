@@ -1,29 +1,46 @@
+package game_engine;
+
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
+import game_engine.Board;
+import game_engine.GameState;
+import game_engine.GlobalKeyListener;
 
 public class Game {
-    private boolean ended;
+    private RenderService renderService;
+    private GameState gameState;
+
     private GlobalKeyListener inputListener;
+
+
     private Board board;
     private int frameRate = 500;
     private int tickRate = 250;
-    private int score;
     public Game() throws NativeHookException {
-        this.ended = false;
+
+
+        this.board = new Board(21,10, x->this.endGame(x));
+
+        this.gameState = new GameState(State.START_MENU, this.board);
+        this.renderService = new RenderService(gameState);
         inputListener = new GlobalKeyListener(
                 x->this.moveLeft(),
                 x->this.moveRight(),
-                x -> this.rotate(),
-                x->this.moveDown()
+                x-> this.rotate(),
+                x->this.moveDown(),
+                x ->this.startGame()
         );
-
         GlobalScreen.registerNativeHook();
         GlobalScreen.addNativeKeyListener(inputListener);
-        this.board = new Board(21,10, x->this.endGame(x));
     }
-    public void start(){
+
+    private void startGame() {
+        gameState.setState(State.GAME);
+    }
+
+    public void start() throws Exception {
         long lastUpdate = System.currentTimeMillis();
-        while(!ended){
+        while(!gameState.isEnded()){
             long now = System.currentTimeMillis();
             if(now - lastUpdate > frameRate) {
                 readInput();
@@ -33,31 +50,26 @@ public class Game {
                 lastUpdate = now;
             }
         }
-
-        if(ended){
-            showEnd();
-        }
     }
 
-    private void showEnd(){
-        System.out.println("Game Over!");
-        System.out.println("Pontuação Final: " + score);
-    }
 
     private void endGame(int score){
-        ended =true;
-        this.score = score;
+        gameState.setEnded();
+        gameState.setScore(score);
     }
     private void readInput(){
 
     }
 
     private void updateStates(){
-        board.updateState();
+        if(gameState.getState() == State.GAME) {
+            board.updateState();
+        }
     }
 
-    private void draw(){
-        board.draw();
+    private void draw() throws Exception {
+        //board.draw();
+        renderService.render();
     }
 
     public void moveLeft(){
