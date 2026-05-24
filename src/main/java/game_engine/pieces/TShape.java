@@ -1,5 +1,6 @@
 package game_engine.pieces;
 
+import game_engine.Board;
 import game_engine.BoardSize;
 import game_engine.Point;
 
@@ -11,20 +12,14 @@ public class TShape extends Shape {
     }
 
     @Override
-    public void draw() {
-
-    }
-
-    @Override
-    public void move(int dir) {
-
+    public void move(Board board, int dir) {
         if(dir == 0){
-            if(!canMoveDown()) return;
+            if(!canMoveDown(board)) return;
             position.move(1, 0);
             return;
         }
 
-        if(!canMove(dir)) return;
+        if(!canMove(board, dir)) return;
         position.move(0, dir);
     }
 
@@ -87,7 +82,6 @@ public class TShape extends Shape {
             points.add(new Point(position.getRow(), position.getColumn()));
         }
 
-
         if(nextRotation == 2) {
             points.add(new Point(position.getRow() + 1, position.getColumn()));
             points.add(new Point(position.getRow(), position.getColumn()-1));
@@ -104,6 +98,4 @@ public class TShape extends Shape {
 
         return points;
     }
-
-
 }

@@ -1,5 +1,6 @@
 package game_engine.pieces;
 
+import game_engine.Board;
 import game_engine.Point;
 import game_engine.BoardSize;
 import java.util.ArrayList;
@@ -14,18 +15,16 @@ public class LShape extends Shape{
         this.position.move(1, 0);
     }
 
-    public void move(int dir){
+    public void move(Board board, int dir){
         if(dir == 0){
-            if(!canMoveDown()) return;
+            if(!canMoveDown(board)) return;
             this.position.move(1, 0);
             return;
         }
 
-        if(!canMove(dir)) return;
+        if(!canMove(board, dir)) return;
         this.position.move(0, dir);
     }
-
-
 
     @Override
     public List<Point> getPoints() {
@@ -100,11 +99,6 @@ public class LShape extends Shape{
         }
 
         return points;
-    }
-
-    @Override
-    public void draw() {
-
     }
 
     /*

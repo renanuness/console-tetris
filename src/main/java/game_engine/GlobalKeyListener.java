@@ -3,42 +3,40 @@ package game_engine;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
+import java.util.ArrayDeque;
 import java.util.function.Consumer;
 
 public class GlobalKeyListener implements NativeKeyListener {
-    private Consumer onLeftKeyPressed;
-    private Consumer onRightKeyPressed;
-    private Consumer onDownKeyPressed;
-    private Consumer onUpKeyPressed;
-    private Consumer onEnterPressed;
+    ArrayDeque<Integer> commands;
 
-    public GlobalKeyListener(Consumer leftKeyPressed, Consumer rightKeyPressed, Consumer upKeyPressed, Consumer downKeyPressed, Consumer enterPressed){
-        this.onLeftKeyPressed = leftKeyPressed;
-        this.onRightKeyPressed = rightKeyPressed;
-        this.onDownKeyPressed = downKeyPressed;
-        this.onUpKeyPressed = upKeyPressed;
-        this.onEnterPressed = enterPressed;
+    public GlobalKeyListener(ArrayDeque<Integer> commands){
+        this.commands = commands;
     }
 
     public void nativeKeyPressed(NativeKeyEvent e){
+
         if(e.getKeyCode() == NativeKeyEvent.VC_LEFT){
-            onLeftKeyPressed.accept("LEFT");
+            //onLeftKeyPressed.accept("LEFT");
+            commands.add(-1);
         }
 
         if(e.getKeyCode() == NativeKeyEvent.VC_RIGHT){
-            onRightKeyPressed.accept("RIGHT");
+            //onRightKeyPressed.accept("RIGHT");
+            commands.add(1);
         }
 
         if(e.getKeyCode() == NativeKeyEvent.VC_UP){
-            onUpKeyPressed.accept("UP");
+            //onUpKeyPressed.accept("UP");
+            commands.add(2);
         }
 
         if(e.getKeyCode() == NativeKeyEvent.VC_DOWN){
-            onDownKeyPressed.accept("DOWN");
+            //onDownKeyPressed.accept("DOWN");
+            commands.add(0);
         }
 
         if(e.getKeyCode() == NativeKeyEvent.VC_ENTER){
-            onEnterPressed.accept("ENTER");
+            commands.add(10);
         }
     }
 }

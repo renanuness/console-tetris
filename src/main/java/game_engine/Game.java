@@ -2,94 +2,36 @@ package game_engine;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
-import game_engine.Board;
-import game_engine.GameState;
-import game_engine.GlobalKeyListener;
+
+import java.util.ArrayDeque;
 
 public class Game {
-    private RenderService renderService;
-    private GameState gameState;
+    private GameContext gameState;
 
     private GlobalKeyListener inputListener;
-
+    private ArrayDeque<Integer> commands;
 
     private Board board;
-    private int frameRate = 500;
-    private int tickRate = 250;
+    private int frameRate = 32;
     public Game() throws NativeHookException {
+        commands = new ArrayDeque<>();
 
-
-        this.board = new Board(21,10, x->this.endGame(x));
-
-        this.gameState = new GameState(State.START_MENU, this.board);
-        this.renderService = new RenderService(gameState);
-        inputListener = new GlobalKeyListener(
-                x->this.moveLeft(),
-                x->this.moveRight(),
-                x-> this.rotate(),
-                x->this.moveDown(),
-                x ->this.startGame()
-        );
+        this.gameState = new GameContext(State.START_MENU, commands);
+        inputListener = new GlobalKeyListener(commands);
         GlobalScreen.registerNativeHook();
         GlobalScreen.addNativeKeyListener(inputListener);
     }
 
-    private void startGame() {
-        gameState.setState(State.GAME);
-    }
-
-    public void start() throws Exception {
+    public void runGame() throws Exception {
         long lastUpdate = System.currentTimeMillis();
-        while(!gameState.isEnded()){
+        while(true){
             long now = System.currentTimeMillis();
-            if(now - lastUpdate > frameRate) {
-                readInput();
-                updateStates();
-                clearScreen();
-                draw();
+            long deltaTime = now - lastUpdate;
+            if(deltaTime > frameRate) {
+                gameState.update(deltaTime);
+                gameState.getGameState().draw();
                 lastUpdate = now;
             }
         }
-    }
-
-
-    private void endGame(int score){
-        gameState.setEnded();
-        gameState.setScore(score);
-    }
-    private void readInput(){
-
-    }
-
-    private void updateStates(){
-        if(gameState.getState() == State.GAME) {
-            board.updateState();
-        }
-    }
-
-    private void draw() throws Exception {
-        //board.draw();
-        renderService.render();
-    }
-
-    public void moveLeft(){
-        board.moveLeft();
-    }
-
-    public void moveRight(){
-        board.moveRight();
-    }
-
-    public void moveDown(){
-        board.moveDown();
-    }
-
-    public void rotate(){
-        board.rotate();
-    }
-
-    public void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 }

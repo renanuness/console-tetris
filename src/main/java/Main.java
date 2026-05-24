@@ -6,7 +6,7 @@ public class Main {
         Game game = null;
         try {
             game = new Game();
-            game.start();
+            game.runGame();
         } catch (NativeHookException e) {
             throw new Exception("", e);
         }catch (Exception e){

@@ -1,15 +1,16 @@
 package game_engine.pieces;
 
 import java.util.List;
+
+import game_engine.Board;
 import game_engine.Point;
 
 public interface Piece {
-    void draw();
-    void move(int dir);
+    void move(Board board, int dir);
     void update();
-    boolean canMove(int dir);
-    boolean canMoveDown();
+    boolean canMove(Board board, int dir);
+    boolean canMoveDown(Board board);
     List<Point> getPoints();
     List<Point> getPointsNextRotation();
-    void rotate();
+    void rotate(Board board);
 }
