@@ -1,3 +1,5 @@
+package game_engine;
+
 public class BoardSize {
     public int columns;
     public int rows;

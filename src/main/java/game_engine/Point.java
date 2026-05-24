@@ -1,3 +1,5 @@
+package game_engine;
+
 public class Point {
     private int row;
     private int column;

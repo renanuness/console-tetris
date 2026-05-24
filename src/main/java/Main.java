@@ -1,11 +1,12 @@
 import com.github.kwhat.jnativehook.NativeHookException;
+import game_engine.Game;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         Game game = null;
         try {
             game = new Game();
-            game.start();
+            game.runGame();
         } catch (NativeHookException e) {
             throw new Exception("", e);
         }catch (Exception e){

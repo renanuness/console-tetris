@@ -1,3 +1,9 @@
+package game_engine.pieces;
+
+import game_engine.Board;
+import game_engine.BoardSize;
+import game_engine.Point;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -5,19 +11,16 @@ public class BoxShape extends Shape{
     public BoxShape(int row, int column, BoardSize boardSize){
         super(row, column, boardSize);
     }
-    @Override
-    public void draw() {
-    }
 
     @Override
-    public void move(int dir) {
+    public void move(Board board, int dir) {
         if(dir == 0){
-            if(!canMoveDown()) return;
+            if(!canMoveDown(board)) return;
             position.move(1, 0);
             return;
         }
 
-        if(!canMove(dir)) return;
+        if(!canMove(board, dir)) return;
         position.move(0, dir);
     }
 
